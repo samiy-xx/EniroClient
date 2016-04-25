@@ -21,7 +21,7 @@ namespace EniroClient.Api
 
         public static IBasicCompanySearchClient BasicCompanySearchClientDk(string profile, string apiKey)
         {
-            return new BasicCompanySearchClient(profile, apiKey, "1.1.3", "se");
+            return new BasicCompanySearchClient(profile, apiKey, "1.1.3", "dk");
         }
     }
 }
