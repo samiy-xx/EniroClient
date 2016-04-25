@@ -1,9 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using EniroClient.Api.Utils;
 using EniroClient.Common.Dto;
 
 namespace EniroClient.Api.Clients
 {
-    public class BasicCompanySearchClient : ClientBase
+    public class BasicCompanySearchClient : ClientBase, IBasicCompanySearchClient, IDisposable
     {
        
         public BasicCompanySearchClient(string profile, string apiKey, string version, string country) 
@@ -21,6 +23,12 @@ namespace EniroClient.Api.Clients
             : base(url, timeoutInSeconds, profile, apiKey, version, country)
         {
            
+        }
+
+        public BasicCompanySearchClient(ISearchHttpClient s, IQueryParameterBuilder p, string url, int timeoutInSeconds, string profile, string apiKey, string version, string country)
+            : base(s, p, url, timeoutInSeconds, profile, apiKey, version, country)
+        {
+
         }
 
         public async Task<ApiResult<EniroResult>> SearchById(string eniroId)
@@ -71,6 +79,11 @@ namespace EniroClient.Api.Clients
             if (end >= 0)
                 AddQueryParameter("to_list", end.ToString());
             return await GetAsync<EniroResult>();
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
         }
     }
 }

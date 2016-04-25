@@ -4,20 +4,24 @@ namespace EniroClient.Api
 {
     public static class ClientFactory
     {
-        public static BasicCompanySearchClient BasicCompanySearchClient(string profile, string apiKey, string country)
+        public static IBasicCompanySearchClient BasicCompanySearchClient(string profile, string apiKey, string country)
         {
-            return new BasicCompanySearchClient(profile, apiKey, "1.0.0", country);
+            return new BasicCompanySearchClient(profile, apiKey, "1.1.3", country);
         }
 
-        public static BasicCompanySearchClient BasicCompanySearchClientNorway(string profile, string apiKey)
+        public static IBasicCompanySearchClient BasicCompanySearchClientNo(string profile, string apiKey)
         {
-            return new BasicCompanySearchClient(profile, apiKey, "1.0.0", "no");
+            return new BasicCompanySearchClient(profile, apiKey, "1.1.3", "no");
         }
 
-        public static BasicCompanySearchClient BasicCompanySearchClientSweden(string profile, string apiKey)
+        public static IBasicCompanySearchClient BasicCompanySearchClientSe(string profile, string apiKey)
         {
-            return new BasicCompanySearchClient(profile, apiKey, "1.0.0", "se");
+            return new BasicCompanySearchClient(profile, apiKey, "1.1.3", "se");
         }
 
+        public static IBasicCompanySearchClient BasicCompanySearchClientDk(string profile, string apiKey)
+        {
+            return new BasicCompanySearchClient(profile, apiKey, "1.1.3", "se");
+        }
     }
 }

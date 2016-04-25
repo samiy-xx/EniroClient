@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BasicCompanySearchClientMockTests.cs" />
     <Compile Include="BasicCompanySearchClientTests.cs" />
     <Compile Include="JsonSerializerTests.cs" />
     <Compile Include="QueryParameterBuilderTests.cs" />

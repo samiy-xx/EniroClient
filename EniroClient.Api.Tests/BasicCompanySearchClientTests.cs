@@ -11,7 +11,7 @@ namespace EniroClient.Api.Tests
     [TestFixture]
     public class BasicCompanySearchClientTests
     {
-        private BasicCompanySearchClient client;
+        private IBasicCompanySearchClient client;
 
         [SetUp]
         public void Setup()

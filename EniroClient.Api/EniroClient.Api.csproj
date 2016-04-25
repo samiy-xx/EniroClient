@@ -45,8 +45,11 @@
     <Compile Include="ClientBase.cs" />
     <Compile Include="ClientFactory.cs" />
     <Compile Include="Clients\BasicCompanySearchClient.cs" />
+    <Compile Include="IBasicCompanySearchClient.cs" />
+    <Compile Include="ISearchHttpClient.cs" />
     <Compile Include="JsonSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SearchHttpClient.cs" />
     <Compile Include="Utils\IQueryParameterBuilder.cs" />
     <Compile Include="Utils\QueryParameterBuilder.cs" />
   </ItemGroup>

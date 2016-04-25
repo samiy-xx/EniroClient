@@ -1,16 +1,16 @@
 ﻿using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 using EniroClient.Api.Utils;
 
 namespace EniroClient.Api
 {
-    public abstract class ClientBase
+    public abstract class ClientBase : IDisposable
     {
         private const int DefaultTimeOutInSeconds = 5;
         private const string BaseUrl = "http://api.eniro.com";
         private readonly string path;
         private readonly IQueryParameterBuilder builder;
+        private readonly ISearchHttpClient client;
 
         protected string ProfileName;
         protected string ApiKey;
@@ -33,9 +33,10 @@ namespace EniroClient.Api
             Country = country;
             path = url;
             builder = new QueryParameterBuilder();
+            client = new SearchHttpClient();
         }
 
-        protected ClientBase(IQueryParameterBuilder b, string url, int timeoutInSeconds, string profileName, string apiKey, string version, string country)
+        protected ClientBase(ISearchHttpClient c, IQueryParameterBuilder b, string url, int timeoutInSeconds, string profileName, string apiKey, string version, string country)
         {
             TimeOut = TimeSpan.FromSeconds(timeoutInSeconds);
             ProfileName = profileName;
@@ -44,6 +45,7 @@ namespace EniroClient.Api
             Country = country;
             path = url;
             builder = b;
+            client = c;
         }
 
         protected async Task<ApiResult<T>> GetAsync<T>()
@@ -53,19 +55,17 @@ namespace EniroClient.Api
             AddQueryParameter("key", ApiKey);
             AddQueryParameter("country", Country);
             AddQueryParameter("version", Version);
-            using (var c = new HttpClient())
+
+            client.TimeOut = TimeOut;
+            var result = await client.GetAsync(new Uri(BaseUrl + path + builder.Build()));
+            var content = await result.Content.ReadAsStringAsync();
+            var o = JsonSerializer.Deserialize<T>(content);
+            return new ApiResult<T>
             {
-                c.Timeout = TimeOut;
-                var result = await c.GetAsync(BaseUrl + path + builder.Build());
-                var content = await result.Content.ReadAsStringAsync();
-                var o = JsonSerializer.Deserialize<T>(content);
-                return new ApiResult<T>
-                {
-                    Content = o,
-                    Message = result.ReasonPhrase,
-                    StatusCode = (int) result.StatusCode
-                };
-            }
+                Content = o,
+                Message = result.ReasonPhrase,
+                StatusCode = (int) result.StatusCode
+            };
         }
 
         protected ApiResult<T> Get<T>(string queryString)
@@ -82,6 +82,11 @@ namespace EniroClient.Api
         protected void ClearQueryParameters()
         {
             builder.Clear();
+        }
+
+        public virtual void Dispose()
+        {
+            client.Dispose();
         }
     }
 }
